@@ -28,15 +28,13 @@ claude mcp add github --transport stdio --scope project -- \
 - Expiration: 90 days
 - No `repo:delete`, no `admin:*`, no org-level scopes
 
-Store the token in 1Password. In Claude Code's MCP env config:
+Store the token in the Bitwarden vault as a secure note named `github-pat-mygridfinity`. Fetch it at session start:
 
-```json
-{
-  "GITHUB_PERSONAL_ACCESS_TOKEN": "op://Personal/github-pat-mygridfinity/credential"
-}
+```bash
+export GITHUB_PERSONAL_ACCESS_TOKEN="$(bw get password github-pat-mygridfinity)"
 ```
 
-(or whatever 1Password CLI reference syntax matches the user's existing setup — match what `claude-config` already uses elsewhere).
+(For the project-global GitHub MCP that ships with the user's `everything-claude-code` plugin, this env var is already wired — no per-project install needed.)
 
 ## 2. OpenSCAD MCP — the killer one
 
@@ -148,29 +146,44 @@ gh auth login
 
 Required for repo creation in `SETUP.md` Phase 4.1. Also useful for `gh pr create`, `gh issue create` from terminal. The GitHub MCP covers most of this from Claude Code's side, but `gh` is handy for shell scripts and quick manual ops.
 
-### 1Password CLI
+### Bitwarden CLI (`bw`)
 
 ```bash
-brew install --cask 1password/tap/1password-cli
-op signin
+brew install bitwarden-cli
+bw login                          # email + master password (+ 2FA)
+export BW_SESSION="$(bw unlock --raw)"
 ```
 
-Required for the credential pattern this project uses. `op run --env-file=.env.template -- pnpm dev` injects secrets at runtime without ever writing them to disk.
+`BW_SESSION` lives in the current shell only. Each new terminal needs `bw unlock` again, or persist the export in a (gitignored, machine-local) file you `source`.
 
-`.env.template` looks like:
+#### Naming convention for vault items
+
+Each project secret gets one Bitwarden item, named `mygridfinity-<purpose>`:
+
+- `mygridfinity-vps-coolify-env` — the Coolify VPS `.env` backup (secure note)
+- `mygridfinity-vps-admin` — VPS Coolify admin login (login item)
+- `mygridfinity-better-auth-secret` — Better Auth signing secret (secure note or password field)
+- `mygridfinity-google-oauth` — Google OAuth client_id + client_secret (login item with custom fields)
+- `mygridfinity-r2-stl` — R2 access keys (login item with custom fields)
+- `mygridfinity-resend` — Resend API key (secure note)
+- `github-pat-mygridfinity` — GitHub fine-grained PAT (secure note)
+
+Custom fields on a login item are accessed by name: `bw get item <name> | jq -r '.fields[] | select(.name=="client-id").value'`.
+
+#### Local `.env` workflow
+
+`.env.example` is committed (placeholder names, empty values). `.env` is gitignored and built locally by fetching from Bitwarden:
 
 ```bash
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/mygridfinity
-REDIS_URL=redis://localhost:6379
-BETTER_AUTH_SECRET=op://Personal/mygridfinity-better-auth-secret/credential
-GOOGLE_CLIENT_ID=op://Personal/mygridfinity-google-oauth/client-id
-GOOGLE_CLIENT_SECRET=op://Personal/mygridfinity-google-oauth/client-secret
-R2_ACCESS_KEY_ID=op://Personal/mygridfinity-r2-stl/access-key-id
-R2_SECRET_ACCESS_KEY=op://Personal/mygridfinity-r2-stl/secret-access-key
-RESEND_API_KEY=op://Personal/mygridfinity-resend/api-key
+cp .env.example .env
+# Then for each variable, fetch from Bitwarden and paste into .env. Examples:
+bw get password mygridfinity-better-auth-secret
+bw get item mygridfinity-r2-stl | jq -r '.fields[] | select(.name=="access-key-id").value'
 ```
 
-`.env.template` is **safe to commit** (no secrets, only references). `.env` is **never** committed.
+There is no native `bw run --env-file` equivalent to `op run`. If you want runtime injection without persisting `.env` to disk, write a small wrapper script that reads `.env.template` and substitutes `bw get ...` calls — keep it out of the repo (or in a `bin/` dir, gitignored if it contains item IDs you'd rather not publish).
+
+`.env` is **never** committed. `gitleaks` runs pre-commit to enforce this.
 
 ## Verification checklist
 
@@ -198,7 +211,7 @@ Suggest the user add (if not already there):
 ## MCP discipline
 
 - Per-project MCPs go in project scope (`--scope project`). User-global MCPs go in user scope. No mixing.
-- MCPs that require credentials reference 1Password via `op://` URIs; never embed real tokens.
+- MCPs that require credentials fetch from the Bitwarden vault (`bw get ...`) at session start; never embed real tokens.
 - Production database/storage access is never wired into an MCP. Always on-demand, manual auth.
 - After installing a new MCP, run `claude mcp` to verify it's connected before relying on it.
 ```

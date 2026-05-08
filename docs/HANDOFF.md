@@ -176,7 +176,7 @@ These exist because the owner had a real Cloudflare account compromise on 2026-0
 
 - **NEVER write a real token, API key, password, or secret into any file in this repo.** Not in code, not in `.env.example`, not in tests, not in markdown.
 - `.env.example` contains placeholder names with empty values only.
-- Real secrets live in 1Password (local dev) or Coolify env vars (prod). Reference by env var name only.
+- Real secrets live in the owner's Bitwarden vault (local dev) or Coolify env vars (prod). Reference by env var name only.
 - Tokens created for this project must have: 90-day expiry, narrow scope (single resource where possible), IP allowlist where the issuer supports it.
 - Pre-commit `gitleaks` runs on every commit. Never bypass with `--no-verify`.
 - If a secret is accidentally committed, rotate it immediately (don't just `git rebase` — assume it's already in someone's clone).

@@ -149,7 +149,7 @@ Wait for completion (~3-5 minutes). Note the URL and one-time admin token printe
 
 ⛔ Open the URL **immediately** and complete setup:
 
-1. Create admin account — strong password, save to 1Password.
+1. Create admin account — strong password, save to the Bitwarden vault.
 2. **Enable 2FA** before doing anything else.
 3. In Settings → Configuration, set the instance domain to the Tailscale hostname: `coolify.<tailnet-name>.ts.net` (or whatever the user prefers).
 
@@ -280,7 +280,7 @@ docker compose ps                 # both should be "healthy"
 
 ```bash
 cp .env.example .env
-# Open in editor, fill values from 1Password
+# Open in editor, fill values from the Bitwarden vault (`bw get notes <item-name>`)
 ```
 
 For local dev:

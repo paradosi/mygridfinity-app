@@ -28,7 +28,7 @@ Prereqs: Node 20+, pnpm 11, Docker Desktop, OpenSCAD (local — for verification
 ```bash
 pnpm install
 docker compose up -d              # postgres + redis
-cp .env.example .env              # fill values from 1Password
+cp .env.example .env              # fill values from your Bitwarden vault (`bw get ...`)
 pnpm db:generate
 pnpm db:migrate
 pnpm dev                          # web + worker in parallel

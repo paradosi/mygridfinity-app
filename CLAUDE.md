@@ -28,7 +28,7 @@ These exist because of a real Cloudflare API token compromise on 2026-05-02. See
 
 - **NEVER write a real token, API key, password, or secret into any file.** Not in code, tests, `.env.example`, markdown, anywhere.
 - `.env.example` contains placeholder names with empty string values only.
-- Real secrets live in 1Password (local) or Coolify env vars (prod). Reference by env var name only in code.
+- Real secrets live in the owner's Bitwarden vault (local dev) or Coolify env vars (prod). Reference by env var name only in code.
 - Any task that needs a secret value: **ASK** the user. Do not invent or infer.
 - Pre-commit `gitleaks` runs via lefthook. Never bypass with `--no-verify`.
 - All tokens this project creates: 90-day expiry, narrow scope, IP allowlist where supported.

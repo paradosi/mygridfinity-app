@@ -11,3 +11,6 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Root tooling: pnpm workspaces, Turbo, TypeScript strict, lefthook + gitleaks pre-commit, GitHub Actions CI.
 - `docker-compose.yml` for local Postgres 16 + Redis 7.
 - Handoff documentation (`docs/HANDOFF.md`, `docs/SETUP.md`, `docs/MCP_AND_TOOLING.md`).
+
+### Changed
+- Switched secret store from 1Password to Bitwarden (`bw` CLI). Updated `CLAUDE.md`, `docs/HANDOFF.md`, `docs/SETUP.md`, `docs/MCP_AND_TOOLING.md`, `README.md`. Vault item naming convention documented in `docs/MCP_AND_TOOLING.md`.
