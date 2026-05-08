@@ -1,0 +1,3 @@
+[submodule "apps/worker/scad/gridfinity-rebuilt-openscad"]
+	path = apps/worker/scad/gridfinity-rebuilt-openscad
+	url = https://github.com/kennetek/gridfinity-rebuilt-openscad.git

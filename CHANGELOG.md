@@ -14,3 +14,6 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Changed
 - Switched secret store from 1Password to Bitwarden (`bw` CLI). Updated `CLAUDE.md`, `docs/HANDOFF.md`, `docs/SETUP.md`, `docs/MCP_AND_TOOLING.md`, `README.md`. Vault item naming convention documented in `docs/MCP_AND_TOOLING.md`.
+
+### Vendored
+- `apps/worker/scad/gridfinity-rebuilt-openscad` — pinned to upstream `910e22d860` (tag `2.0.0`, 2025-08-31). All six v1 baseplate parameters (`gridx`, `gridy`, `style_plate`, `enable_magnet`, `chamfer_holes`, `crush_ribs`) verified present at this SHA.
