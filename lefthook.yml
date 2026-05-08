@@ -1,0 +1,11 @@
+pre-commit:
+  parallel: true
+  commands:
+    gitleaks:
+      run: gitleaks protect --staged --no-banner
+    typecheck:
+      glob: "*.{ts,tsx}"
+      run: pnpm typecheck
+    lint:
+      glob: "*.{ts,tsx,js,jsx}"
+      run: pnpm lint

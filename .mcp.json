@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "openscad": {
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "run",
+        "--python",
+        "3.12",
+        "--with",
+        "git+https://github.com/quellant/openscad-mcp.git",
+        "openscad-mcp"
+      ],
+      "env": {}
+    }
+  }
+}

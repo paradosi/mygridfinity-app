@@ -1,0 +1,9 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+verifyDepsBeforeRun: false
+strictDepBuilds: false
+onlyBuiltDependencies:
+  - esbuild
+  - msgpackr-extract
+  - sharp
